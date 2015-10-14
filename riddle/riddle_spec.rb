@@ -210,11 +210,13 @@ describe "McComRiddle" do
   end
 
   it "tests_contest_rules_regs" do 
-    @driver.find_element(:xpath, "//*[@id='tc_content']").displayed?.should == false
+    expect(is_displayed?(xpath: "//*[@id='tc_content']")).to eql false
     @driver.find_element(:xpath, "//*[@id='show_tc']").click
     @driver.find_element(:xpath, "//*[@id='tc_content']").displayed?.should == true
     (@driver.find_element(:xpath, "//*[@id='tc_content']/h4").text).should == "MasteryConnect
 Official Sweepstakes Rules and Regulations"
+    # @driver.find_element(:xpath, "//*[@id='show_tc']").click
+    # @driver.find_element(:xpath, "//*[@id='tc_content']").displayed?.should == false
   end
 
   def element_present?(how, what)
@@ -224,14 +226,18 @@ Official Sweepstakes Rules and Regulations"
     false
   end
 
-  def element_displayed?(how, what)
-    @driver.manage.timeouts.implicit_wait = 0
-        result = @driver.find_elements(how, what).size() > 0
-        if result
-            result = @driver.find_element(how, what).displayed?
-        end
-        @driver.manage.timeouts.implicit_wait = 30
-        return result
+  def rescue_exceptions
+    begin
+      yield
+    rescue Selenium::WebDriver::Error::NoSuchElementError
+      false
+    rescue Selenium::WebDriver::Error::StaleElementReferenceError
+      false
+    end
+  end
+
+  def is_displayed?(locator = {})
+    rescue_exceptions { @driver.find_element(locator).displayed? }
   end
   
   def alert_present?()
