@@ -12,7 +12,21 @@ end
 describe "OverviewSpec" do
 
   before(:each) do
-    @driver = Selenium::WebDriver.for :firefox
+    # @driver = Selenium::WebDriver.for :firefox
+    case ENV['browser']
+    when 'firefox'
+      @driver = Selenium::WebDriver.for :firefox
+    when 'chrome'
+      Selenium::WebDriver::Chrome::Service.executable_path = File.join(Dir.pwd,
+'vendor/chromedriver')
+      @driver = Selenium::WebDriver.for :chrome
+    end
+
+    # puts @driver.manage.window.size
+    target_size = Selenium::WebDriver::Dimension.new(1050, 800)
+    @driver.manage.window.size = target_size
+    # puts @driver.manage.window.size
+
     @base_url = "https://www-staging.masteryconnect.com/"
     @accept_next_alert = true
     @driver.manage.timeouts.implicit_wait = 30
@@ -40,7 +54,7 @@ describe "OverviewSpec" do
     (@driver.find_element(:xpath, "//*[@id='home']/div/div/h1").text).should == "Student learning identified."
 
     @driver.find_element(:xpath, "//li[2]/span").click
-    @driver.find_element(:class, "video1_play").click
+    @driver.find_element(:xpath, "//*[@id='question1']/div/div/div[2]/a").click
     @driver.find_element(:css, "#video1 > div.modal_close").click
     @driver.find_element(:xpath, "//*[@id='question1']/div/div/div[1]/a/i").click
     @driver.find_element(:css, "#video1 > div.modal_close").click
