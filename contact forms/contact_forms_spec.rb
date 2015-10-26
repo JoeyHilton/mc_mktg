@@ -154,6 +154,34 @@ describe "OverviewSpec" do
     (@driver.find_element(:xpath, "//*[@id='form_success']/h2").text).should == "Thanks!"
     verify { element_present?(:xpath, "//*[@id='form_success']/p[2]/a").should be_true }
   end
+
+  it "tests_school_not_listed_overview" do 
+    wait = Selenium::WebDriver::Wait.new(:timeout => 15)
+    @driver.find_element(:xpath, "//li[5]/span").click
+    @driver.find_element(:id, "full_name").send_keys "notlistedoverview test"
+    Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "role")).select_by(:text, "School Administrator")
+    @driver.find_element(:id, "email").send_keys "notlistedoverview@test.com"
+    @driver.find_element(:id, "phone").send_keys "111-222-3333"
+    @driver.find_element(:id, "zip_code").send_keys "83713"
+    Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "school_list")).select_by(:text, "SCHOOL NOT LISTED")
+
+    wait.until {
+    @driver.find_element(:id, "school_manual_input").displayed?
+    }
+    @driver.find_element(:id, "school_manual_input").send_keys "Imperial Academy"
+
+    if (@driver.find_element(:id, "school_list").text) == "SCHOOL NOT LISTED"
+      @driver.find_element(:id, "submit").click
+    else
+      Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "school_list")).select_by(:text, "SCHOOL NOT LISTED")
+    end
+    
+    @driver.find_element(:id, "submit").click
+
+    verify { element_present?(:id, "form_success").should be_true }
+    (@driver.find_element(:xpath, "//*[@id='form_success']/h2").text).should == "Thanks!"
+    verify { element_present?(:xpath, "//*[@id='form_success']/p[2]/a").should be_true }
+  end
   
   def element_present?(how, what)
     @driver.find_element(how, what)
@@ -168,4 +196,72 @@ describe "OverviewSpec" do
     @verification_errors << ex
   end
   
+end
+
+describe "McComRiddle" do
+
+  before(:each) do
+    @driver = Selenium::WebDriver.for :firefox
+    @base_url = "https://www.masteryconnect.com/"
+    @accept_next_alert = true
+    @driver.manage.timeouts.implicit_wait = 30
+    @verification_errors = []
+    @url_path = "/riddle/"
+    @driver.get(@base_url + @url_path)
+  end
+  
+  after(:each) do
+    @driver.quit
+    # @verification_errors.should == []
+  end
+
+  it "tests_form_dropdown_from_yellow_pencil" do 
+    @driver.find_element(:xpath, "//*[@id='yellow']/div[1]").click
+    element_present?(:xpath, "//*[@id='form']").should be true
+    element_present?(:xpath, "//*[@id='submit']").should be true
+
+    @driver.find_element(:xpath, "//*[@id='answer']").clear
+    @driver.find_element(:xpath, "//*[@id='answer']").send_keys "stamp"
+    @driver.find_element(:xpath, "//*[@id='full_name']").send_keys "riddle test"
+    Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "role")).select_by(:text, "Teacher")
+    @driver.find_element(:xpath, "//*[@id='email']").send_keys "riddle@test.com"
+    @driver.find_element(:xpath, "//*[@id='phone']").send_keys "111-222-3333"
+    @driver.find_element(:xpath, "//*[@id='zip_code']").send_keys "84087"
+    Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "school_list")).select_by(:text, "WEST BOUNTIFUL SCHOOL")
+    @driver.find_element(:id, "submit").click
+    element_present?(:xpath, "//*[@id='lean_overlay']").should be true
+    (@driver.find_element(:xpath, "//*[@id='riddle_right']/div[1]/h3").text).should == "Nailed it!"
+    element_present?(:xpath, "//*[@id='riddle_right']/div[2]/img").should be true
+
+    @driver.find_element(:xpath, "//*[@id='form_success']/div[1]").click
+  end
+
+  it "tests_notlisted_yellow_pencil" do 
+    @driver.find_element(:xpath, "//*[@id='yellow']/div[1]").click
+    element_present?(:xpath, "//*[@id='form']").should be true
+    element_present?(:xpath, "//*[@id='submit']").should be true
+
+    @driver.find_element(:xpath, "//*[@id='answer']").clear
+    @driver.find_element(:xpath, "//*[@id='answer']").send_keys "stamp"
+    @driver.find_element(:xpath, "//*[@id='full_name']").send_keys "notlisted test"
+    Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "role")).select_by(:text, "Teacher")
+    @driver.find_element(:xpath, "//*[@id='email']").send_keys "riddlenotlisted@test.com"
+    @driver.find_element(:xpath, "//*[@id='phone']").send_keys "111-222-3333"
+    @driver.find_element(:xpath, "//*[@id='zip_code']").send_keys "84087"
+    Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "school_list")).select_by(:text, "SCHOOL NOT LISTED")
+    @driver.find_element(:id, "school_manual_input").send_keys "Clown College"
+    @driver.find_element(:id, "submit").click
+    element_present?(:xpath, "//*[@id='lean_overlay']").should be true
+    (@driver.find_element(:xpath, "//*[@id='riddle_right']/div[1]/h3").text).should == "Nailed it!"
+    element_present?(:xpath, "//*[@id='riddle_right']/div[2]/img").should be true
+
+    @driver.find_element(:xpath, "//*[@id='form_success']/div[1]").click
+  end
+
+  def element_present?(how, what)
+    @driver.find_element(how, what)
+    true
+  rescue Selenium::WebDriver::Error::NoSuchElementError
+    false
+  end
 end
