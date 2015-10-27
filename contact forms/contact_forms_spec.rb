@@ -1,6 +1,7 @@
 require "json"
 require "selenium-webdriver"
 require "rspec"
+require "pry"
 include RSpec::Expectations
 
 RSpec.configure do |config|
@@ -48,22 +49,16 @@ describe "SloFormA" do
   it "tests_school_not_listed_field" do 
     wait = Selenium::WebDriver::Wait.new(:timeout => 15)
     @driver.find_element(:link, "GET MORE INFO").click
-    # @driver.find_element(:id, "first_name").clear
     @driver.find_element(:id, "first_name").send_keys "Notlisted"
-    # @driver.find_element(:id, "last_name").clear
     @driver.find_element(:id, "last_name").send_keys "TestA"
-    # @driver.find_element(:id, "zip_code").clear
     @driver.find_element(:id, "zip_code").send_keys "84087"
     Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "role")).select_by(:text, "School Administrator")
-    # @driver.find_element(:id, "email").clear
     @driver.find_element(:id, "email").send_keys "notlisted@test.com"
-    # @driver.find_element(:id, "phone").clear
     @driver.find_element(:id, "phone").send_keys "555-555-5555"
     Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "school_list")).select_by(:text, "SCHOOL NOT LISTED")
     wait.until {
     @driver.find_element(:id, "school_list_alt").displayed?
     }
-    # @driver.find_element(:id, "school_list_alt").clear
     @driver.find_element(:id, "school_list_alt").send_keys "Starfleet Academy"
     @driver.find_element(:id, "submit").click
     @driver.find_element(:xpath, "//*[@id='form_success']/a").displayed?
@@ -264,4 +259,107 @@ describe "McComRiddle" do
   rescue Selenium::WebDriver::Error::NoSuchElementError
     false
   end
+end
+
+describe "FreeCoffee" do
+
+  before(:each) do
+    @driver = Selenium::WebDriver.for :firefox
+    @base_url = "https://www.masteryconnect.com/"
+    @accept_next_alert = true
+    @driver.manage.timeouts.implicit_wait = 30
+    @verification_errors = []
+    @url_path = "/free-coffee/"
+    @driver.get(@base_url + @url_path)
+  end
+  
+  after(:each) do
+    @driver.quit
+    # @verification_errors.should == []
+  end
+
+  it "tests_coffee_request_form" do 
+    @driver.find_element(:class, "more_info").click
+    element_present?(:id, "more_info").should be true
+    element_present?(:id, "submit").should be true
+
+    @driver.find_element(:xpath, "//*[@id='full_name']").send_keys "Coffee Test"
+    @driver.find_element(:xpath, "//*[@id='zip_code']").send_keys "84087"
+    Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "role")).select_by(:text, "School Administrator")
+    @driver.find_element(:xpath, "//*[@id='email']").send_keys "coffee@test.com"
+    @driver.find_element(:xpath, "//*[@id='phone']").send_keys "111-222-3333"
+    Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "school_list")).select_by(:text, "WEST BOUNTIFUL SCHOOL")
+    @driver.find_element(:id, "submit").click
+
+    element_present?(:id, "form_success").should be true
+    element_present?(:xpath, "//*[@id='form_success']/h2/i").should be true
+    verify { element_present?(:link, "OK, GOT IT").should be_true }
+    @driver.find_element(:link, "OK, GOT IT").click
+  end
+
+  it "tests_coffee_notlisted_field" do 
+    wait = Selenium::WebDriver::Wait.new(:timeout => 15)
+    @driver.find_element(:class, "more_info").click
+    element_present?(:id, "more_info").should be true
+    element_present?(:id, "submit").should be true
+
+    @driver.find_element(:xpath, "//*[@id='full_name']").send_keys "Coffeenolist Test"
+    @driver.find_element(:xpath, "//*[@id='zip_code']").send_keys "83713"
+    Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "role")).select_by(:text, "District Administrator")
+    @driver.find_element(:xpath, "//*[@id='email']").send_keys "coffeenolist@test.com"
+    @driver.find_element(:xpath, "//*[@id='phone']").send_keys "333-222-1111"
+    Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "school_list")).select_by(:text, "SCHOOL NOT LISTED")
+    
+    wait.until {
+    @driver.find_element(:id, "school_list_alt").displayed?
+    }
+    @driver.find_element(:id, "school_list_alt").send_keys "Marky Mark and the Funky Bunch"
+
+    @driver.find_element(:id, "submit").click
+
+    element_present?(:id, "form_success").should be true
+    element_present?(:xpath, "//*[@id='form_success']/h2/i").should be true
+    verify { element_present?(:link, "OK, GOT IT").should be_true }
+    @driver.find_element(:link, "OK, GOT IT").click
+  end
+
+  def element_present?(how, what)
+    @driver.find_element(how, what)
+    true
+  rescue Selenium::WebDriver::Error::NoSuchElementError
+    false
+  end
+
+  def verify(&blk)
+    yield
+  rescue ExpectationNotMetError => ex
+    @verification_errors << ex
+  end
+end
+
+describe "SocrativeContactForm" do 
+
+  before(:each) do
+    @driver = Selenium::WebDriver.for :firefox
+    @base_url = "https://www.socrative.com/"
+    @accept_next_alert = true
+    @driver.manage.timeouts.implicit_wait = 30
+    @verification_errors = []
+    @driver.get(@base_url)
+  end
+  
+  after(:each) do
+    @driver.quit
+    # @verification_errors.should == []
+  end
+
+  it 'tests_contact_form' do 
+    wait = Selenium::WebDriver::Wait.new(:timeout => 10)
+    @driver.find_element(:link, "Contact").click
+    wait.until { @driver.find_element(:xpath, "//aside[3]").displayed? }
+    element_present?(:id, "help_submit").should be true
+    (@driver.find_element(:xpath, "//aside[3]/div/header/h1").text).should == "Contact Us"
+    @driver.find_element(:xpath, "//aside[3]/div/i").click
+  end
+
 end
