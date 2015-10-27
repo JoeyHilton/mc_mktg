@@ -1,7 +1,7 @@
 require "json"
 require "selenium-webdriver"
 require "rspec"
-require "pry"
+require "faker"
 include RSpec::Expectations
 
 RSpec.configure do |config|
@@ -337,20 +337,18 @@ describe "FreeCoffee" do
   end
 end
 
-describe "SocrativeContactForm" do 
+describe "SocrativeForms" do 
 
   before(:each) do
     @driver = Selenium::WebDriver.for :firefox
-    @base_url = "https://www.socrative.com/"
+    @driver.get("http://www.socrative.com")
     @accept_next_alert = true
     @driver.manage.timeouts.implicit_wait = 30
     @verification_errors = []
-    @driver.get(@base_url)
   end
   
   after(:each) do
     @driver.quit
-    # @verification_errors.should == []
   end
 
   it 'tests_contact_form' do 
@@ -359,7 +357,63 @@ describe "SocrativeContactForm" do
     wait.until { @driver.find_element(:xpath, "//aside[3]").displayed? }
     element_present?(:id, "help_submit").should be true
     (@driver.find_element(:xpath, "//aside[3]/div/header/h1").text).should == "Contact Us"
-    @driver.find_element(:xpath, "//aside[3]/div/i").click
+    @driver.find_element(:name, "user_email").send_keys "test@test.com"
+    Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "select_device")).select_by(:text, "Firefox - Browser")
+    Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "select_topic")).select_by(:text, "Feedback")
+    Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "select_area")).select_by(:text, "Space Race")
+    @driver.find_element(:name, "user_description").send_keys "You guys are outta this world!"
+    @driver.find_element(:id, "help_submit").click
   end
 
+  it 'tests_socrative_k-12_signup' do 
+    wait = Selenium::WebDriver::Wait.new(:timeout => 10)
+    @driver.find_element(:link, "GET A FREE ACCOUNT").click
+    (@driver.current_url).should == "https://b.socrative.com/login/teacher/#register-teacher"
+    @driver.find_element(:class, "firstname").send_keys "Test"
+    @driver.find_element(:class, "lastname").send_keys "Test"
+    @driver.find_element(:id, "email1").send_keys Faker::Internet.email
+    @driver.find_element(:id, "email1").send_keys :command, 'a'
+    @driver.find_element(:id, "email1").send_keys :command, 'c'
+    @driver.find_element(:id, "email2").send_keys :command, 'v'
+    @driver.find_element(:id, "password1").send_keys "password"
+    Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "country")).select_by(:text, "USA")
+    Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "organization-type")).select_by(:text, "K-12")
+    @driver.find_element(:id, "zip").send_keys "84087"
+    wait.until { @driver.find_element(:id, "schoolListSelect").displayed? }
+    Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "schoolListSelect")).select_by(:text, "WEST BOUNTIFUL SCHOOL")
+    @driver.find_element(:id, "demo-yes").click
+    @driver.find_element(:id, "teacher").click
+    @driver.find_element(:id, "it-technology").click
+    @driver.find_element(:id, "administrator").click
+    @driver.find_element(:id, "other").click
+    @driver.find_element(:id, "agreeToTOS").click
+    @driver.find_element(:id, "create-account-button").click
+  end
+
+end
+
+describe "MCcomForms" do 
+
+  before(:each) do
+    @driver = Selenium::WebDriver.for :firefox
+    @base_url = "https://www.masteryconnect.com/"
+    @accept_next_alert = true
+    @driver.manage.timeouts.implicit_wait = 30
+    @verification_errors = []
+  end
+  
+  it "tests_contactus_form" do 
+    @driver.get(@base_url + "/contact_us.html")
+    @driver.find_element(:class, "first_name").send_keys "Contact"
+    @driver.find_element(:class, "last_name").send_keys "Test"
+    @driver.find_element(:class, "title").send_keys "Prince of the Land of Stench"
+    @driver.find_element(:class, "phone").send_keys "801-987-6543"
+    @driver.find_element(:class, "email").send_keys "contact@test.com"
+
+
+  end
+  after(:each) do
+    @driver.quit
+    # @verification_errors.should == []
+  end
 end
