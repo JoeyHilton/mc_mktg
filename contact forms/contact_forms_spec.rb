@@ -116,7 +116,7 @@ describe "OverviewSpec" do
 
   before(:each) do
     @driver = Selenium::WebDriver.for :firefox
-    @base_url = "https://www-staging.masteryconnect.com/"
+    @base_url = "https://www.masteryconnect.com/"
     @accept_next_alert = true
     @driver.manage.timeouts.implicit_wait = 30
     @verification_errors = []
@@ -174,7 +174,7 @@ describe "OverviewSpec" do
     
     @driver.find_element(:id, "submit").click
 
-    verify { element_present?(:id, "form_success").should be_true }
+    @driver.find_element(:id, "form_success").displayed?
     (@driver.find_element(:xpath, "//*[@id='form_success']/h2").text).should == "Thanks!"
     verify { element_present?(:xpath, "//*[@id='form_success']/p[2]/a").should be_true }
   end
@@ -507,6 +507,34 @@ describe "MCcomForms" do
     @driver.find_element(:class, "lte_gry_rnd_btn").click
     wait.until { @driver.find_element(:xpath, "//*[@id='request_form']/div/div[1]/h3").displayed? }
     (@driver.find_element(:xpath, "//*[@id='request_form']/div/div[1]/h3").text).should == "Thank you for registering for our Webinar!"
+  end
+
+  it "tests_mindful_form" do 
+    wait = Selenium::WebDriver::Wait.new(:timeout => 15)
+    @driver.get(@base_url + "/mindful.html")
+    @driver.find_element(:id, "full_name").send_keys "Mindful Test"
+    Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "role")).select_by(:text, "Teacher")
+    @driver.find_element(:id, "email").send_keys Faker::Internet.email
+    @driver.find_element(:id, "zip_code").send_keys "83713"
+    @driver.find_element(:id, "phone").send_keys "208-456-1237"
+    Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "school_list")).select_by(:text, "SUMMERWIND ELEMENTARY SCHOOL")
+    @driver.find_element(:id, "submit").click
+    (@driver.find_element(:xpath, "//*[@id='form_success']/h2").text).should == "Thanks!"
+  end
+
+  it "tests_notlisted_mindful_form" do 
+    wait = Selenium::WebDriver::Wait.new(:timeout => 15)
+    @driver.get(@base_url + "/mindful.html")
+    @driver.find_element(:id, "full_name").send_keys "Notlistedmindful Test"
+    Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "role")).select_by(:text, "Teacher")
+    @driver.find_element(:id, "email").send_keys Faker::Internet.email
+    @driver.find_element(:id, "zip_code").send_keys "83713"
+    @driver.find_element(:id, "phone").send_keys "208-456-1237"
+    Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "school_list")).select_by(:text, "SCHOOL NOT LISTED")
+    wait.until { @driver.find_element(:id, "school_manual_input").displayed? }
+    @driver.find_element(:id, "school_manual_input").send_keys "Xaviers School for the Gifted"
+    @driver.find_element(:id, "submit").click
+    (@driver.find_element(:xpath, "//*[@id='form_success']/h2").text).should == "Thanks!"
   end
 
 end
