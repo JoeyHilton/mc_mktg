@@ -158,6 +158,28 @@ describe "McComRiddle" do
     @driver.find_element(:xpath, "//*[@id='form_success']/div[1]").click
   end
 
+  it "tests_notlisted_yellow_pencil" do 
+    @driver.find_element(:xpath, "//*[@id='yellow']/div[1]").click
+    element_present?(:xpath, "//*[@id='form']").should be true
+    element_present?(:xpath, "//*[@id='submit']").should be true
+
+    @driver.find_element(:xpath, "//*[@id='answer']").clear
+    @driver.find_element(:xpath, "//*[@id='answer']").send_keys "stamp"
+    @driver.find_element(:xpath, "//*[@id='full_name']").send_keys "notlisted test"
+    Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "role")).select_by(:text, "Teacher")
+    @driver.find_element(:xpath, "//*[@id='email']").send_keys "riddlenotlisted@test.com"
+    @driver.find_element(:xpath, "//*[@id='phone']").send_keys "111-222-3333"
+    @driver.find_element(:xpath, "//*[@id='zip_code']").send_keys "84087"
+    Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "school_list")).select_by(:text, "SCHOOL NOT LISTED")
+    @driver.find_element(:id, "school_manual_input").send_keys "Clown College"
+    @driver.find_element(:id, "submit").click
+    element_present?(:xpath, "//*[@id='lean_overlay']").should be true
+    (@driver.find_element(:xpath, "//*[@id='riddle_right']/div[1]/h3").text).should == "Nailed it!"
+    element_present?(:xpath, "//*[@id='riddle_right']/div[2]/img").should be true
+
+    @driver.find_element(:xpath, "//*[@id='form_success']/div[1]").click
+  end
+
   it "tests_empty_form_fields" do 
     @driver.find_element(:xpath, "//*[@id='black']/div[1]").click
     element_present?(:xpath, "//*[@id='form']").should be true
@@ -205,7 +227,7 @@ describe "McComRiddle" do
     @driver.find_element(:xpath, "html/body/footer[1]/div/p/a").click
 
     expect(@driver.title).to eql 'MasteryConnect'
-    @driver.current_url.should == "https://www.masteryconnect.com/"
+    @driver.current_url.should == "https://www.masteryconnect.com/?utm_source=Web&utm_medium=Link&utm_campaign=Riddle"
     @driver.navigate.back
   end
 
