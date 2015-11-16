@@ -356,20 +356,41 @@ describe "MCcomForms" do
   it "tests_contactus_form" do 
     wait = Selenium::WebDriver::Wait.new(:timeout => 15)
     @driver.get(@base_url + "/contact_us.html")
-    @driver.find_element(:class, "first_name").send_keys "Contact"
-    @driver.find_element(:class, "last_name").send_keys "Test"
-    @driver.find_element(:class, "title").send_keys "Prince of the Land of Stench"
-    Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "role")).select_by(:text, "Teacher")
-    @driver.find_element(:class, "phone").send_keys "801-987-6543"
-    @driver.find_element(:class, "email").send_keys "contact@test.com"
-    Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "organization_info")).select_by(:text, "K-12")
-    # binding.pry
+    @driver.find_element(:link, "REQUEST MORE INFO").click
+    @driver.find_element(:name, "first_name").send_keys "Contact"
+    @driver.find_element(:name, "last_name").send_keys "Test"
+    @driver.find_element(:name, "title").send_keys "Prince of the Land of Stench"
+    select_dropdown(:class, "role", "Teacher")
+    @driver.find_element(:name, "phone").send_keys "801-987-6543"
+    @driver.find_element(:name, "email").send_keys "contact@test.com"
+    select_dropdown(:id, "organization_info", "K-12")
     @driver.find_element(:id, "zip").send_keys "83713"
     wait.until { @driver.find_element(:id, "signUpSchool").displayed? }
-    # Selenium::WebDriver::Support::Select.new(@driver.find_elemexnt(:id, "signUpSchool")).select_by(:text, "JOPLIN ELEMENTARY SCHOOL")
-    @driver.find_element(:xpath, "//*[@id='signUpSchool']/optgroup[1]/option[1]").click
-    @driver.find_element(:xpath, "//*[@id='signUpSchool']/optgroup[1]/option[1]").click
-    @driver.find_element(:class, "message").send_keys "Hello there."
+    # @driver.find_element(:xpath, "//*[@id='signUpSchool']/optgroup[1]/option[1]").click
+    # @driver.find_element(:xpath, "//*[@id='signUpSchool']/optgroup[1]/option[1]").click
+    select_dropdown(:id, "signUpSchool", "CENTENNIAL HIGH SCHOOL")
+    @driver.find_element(:xpath, "//*[@id='form_area_one']/button").click
+    (@driver.find_element(:xpath, "//*[@id='request_form']/div/div[1]/h3").text).should == "Thanks for contacting MasteryConnect!"
+  end
+
+  it "tests_contactus_notlisted_form" do 
+    wait = Selenium::WebDriver::Wait.new(:timeout => 15)
+    @driver.get(@base_url + "/contact_us.html")
+    @driver.find_element(:link, "REQUEST MORE INFO").click
+    @driver.find_element(:name, "first_name").send_keys "Contactnotlisted"
+    @driver.find_element(:name, "last_name").send_keys "Test"
+    @driver.find_element(:name, "title").send_keys "Goblin King"
+    select_dropdown(:class, "role", "Teacher")
+    @driver.find_element(:name, "phone").send_keys "801-987-6543"
+    @driver.find_element(:name, "email").send_keys "contact@test.com"
+    select_dropdown(:id, "organization_info", "K-12")
+    @driver.find_element(:id, "zip").send_keys "83713"
+    wait.until { @driver.find_element(:id, "signUpSchool").displayed? }
+    # @driver.find_element(:xpath, "//*[@id='signUpSchool']/optgroup[1]/option[1]").click
+    # @driver.find_element(:xpath, "//*[@id='signUpSchool']/optgroup[1]/option[1]").click
+    select_dropdown(:id, "signUpSchool", "School NOT LISTED")
+    wait.until { @driver.find_element(:id, "school_list_alt").displayed? }
+    @driver.find_element(:id, "school_list_alt").send_keys "Labyrinth"
     @driver.find_element(:xpath, "//*[@id='form_area_one']/button").click
     (@driver.find_element(:xpath, "//*[@id='request_form']/div/div[1]/h3").text).should == "Thanks for contacting MasteryConnect!"
   end
@@ -402,14 +423,8 @@ describe "MCcomForms" do
   it "tests_requestdemo_school_form" do 
     wait = Selenium::WebDriver::Wait.new(:timeout => 15)
 
-    def select_dropdown(selector, tag, option)
-      dropdown = @driver.find_element(selector, tag)
-      # sleep 5
-      select_list = Selenium::WebDriver::Support::Select.new(dropdown)
-      select_list.select_by(:text, option)
-    end
-
     @driver.get(@base_url + "/request-a-demo.html")
+    select_dropdown(:id, "organization_info", "I work at a school")
     @driver.find_element(:id, "zip").send_keys "83713"
     wait.until { @driver.find_element(:id, "signUpSchool").displayed? }
     @driver.find_element(:name, "first_name").send_keys "Requestdemo"
@@ -434,12 +449,31 @@ describe "MCcomForms" do
 
     # wait_for(10) { @driver.find_element(:xpath, "//*[@id='signUpSchool']/optgroup[1]/option[1]").displayed? }
     # Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "signUpSchool")).select_by(:text, "JOPLIN ELEMENTARY SCHOOL")
-    # select_dropdown(:id, "signUpSchool", "CENTENNIAL HIGH SCHOOL")
+    select_dropdown(:id, "signUpSchool", "CENTENNIAL HIGH SCHOOL")
 
-    # This is still not sending to pardot, even though the spec passes. Grrrrrr!
-    @driver.find_element(:id, "signUpSchool").send_keys "CENTENNIAL HIGH SCHOOL"
+    # This is still not sending to salesforce, even though the spec passes. Grrrrrr!
+    # @driver.find_element(:id, "signUpSchool").send_keys "CENTENNIAL HIGH SCHOOL"
     # @driver.find_element(:xpath, "//*[@id='signUpSchool']/optgroup[1]/option[3]").click
 
+    @driver.find_element(:class, "med_gry_rnd_btn").click
+    (@driver.find_element(:xpath, "//*[@id='request_form']/div/div[1]/h3").text).should == "Thanks for contacting MasteryConnect!"
+  end
+
+  it "tests_requestdemo_schoolnotlisted_form" do 
+    wait = Selenium::WebDriver::Wait.new(:timeout => 15)
+
+    @driver.get(@base_url + "/request-a-demo.html")
+    select_dropdown(:id, "organization_info", "I work at a school")
+    @driver.find_element(:id, "zip").send_keys "83713"
+    wait.until { @driver.find_element(:id, "signUpSchool").displayed? }
+    @driver.find_element(:name, "first_name").send_keys "Requestdemo"
+    @driver.find_element(:name, "last_name").send_keys "Test"
+    @driver.find_element(:name, "title").send_keys "Caesar"
+    select_dropdown(:class, "role", "Teacher")
+    @driver.find_element(:name, "phone").send_keys "208-456-1237"
+    @driver.find_element(:name, "email").send_keys Faker::Internet.email
+    select_dropdown(:id, "signUpSchool", "School NOT LISTED")
+    @driver.find_element(:id, "school_list_alt").send_keys "Battle School"
     @driver.find_element(:class, "med_gry_rnd_btn").click
     (@driver.find_element(:xpath, "//*[@id='request_form']/div/div[1]/h3").text).should == "Thanks for contacting MasteryConnect!"
   end
@@ -447,16 +481,35 @@ describe "MCcomForms" do
   it "tests_requestdemo_district_form" do 
     wait = Selenium::WebDriver::Wait.new(:timeout => 15)
     @driver.get(@base_url + "/request-a-demo.html")
-    @driver.find_element(:name, "first_name").send_keys "Requestdemo"
-    @driver.find_element(:name, "last_name").send_keys "Districttest"
+    @driver.find_element(:name, "first_name").send_keys "Districttest"
+    @driver.find_element(:name, "last_name").send_keys "Requestdemo"
     @driver.find_element(:name, "title").send_keys "Colonel"
-    Selenium::WebDriver::Support::Select.new(@driver.find_element(:class, "role")).select_by(:text, "District Administrator")
+    select_dropdown(:class, "role", "District Administrator")
     @driver.find_element(:name, "phone").send_keys "208-456-1237"
     @driver.find_element(:name, "email").send_keys Faker::Internet.email
-    Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "organization_info")).select_by(:text, "I work at a district")
-    wait.until { @driver.find_element(:xpath, "//*[@id='manual-school-entry-district']/input").displayed? }
-    @driver.find_element(:xpath, "//*[@id='manual-school-entry-district']/input").send_keys "Hidden Valley Ranch"
-    @driver.find_element(:name, "state").send_keys "Idaho"
+    select_dropdown(:id, "organization_info","I work at a district")
+    wait.until { @driver.find_element(:id, "zip").displayed? }
+    @driver.find_element(:id, "zip").send_keys "83713"
+    select_dropdown(:id, "signUpSchool","MERIDIAN JOINT DISTRICT")
+    @driver.find_element(:class, "med_gry_rnd_btn").click
+    (@driver.find_element(:xpath, "//*[@id='request_form']/div/div[1]/h3").text).should == "Thanks for contacting MasteryConnect!"
+  end
+
+  it "tests_requestdemo_districtnotlisted_form" do 
+    wait = Selenium::WebDriver::Wait.new(:timeout => 15)
+    @driver.get(@base_url + "/request-a-demo.html")
+    @driver.find_element(:name, "first_name").send_keys "Districtnolistytest"
+    @driver.find_element(:name, "last_name").send_keys "Requestdemo"
+    @driver.find_element(:name, "title").send_keys "Colonel"
+    select_dropdown(:class, "role", "District Administrator")
+    @driver.find_element(:name, "phone").send_keys "208-456-1237"
+    @driver.find_element(:name, "email").send_keys Faker::Internet.email
+    select_dropdown(:id, "organization_info","I work at a district")
+    wait.until { @driver.find_element(:id, "zip").displayed? }
+    @driver.find_element(:id, "zip").send_keys "83713"
+    select_dropdown(:id, "signUpSchool","District NOT LISTED")
+    wait.until { @driver.find_element(:id, "school_list_alt").displayed? }
+    @driver.find_element(:id, "school_list_alt").send_keys "District Nine"
     @driver.find_element(:class, "med_gry_rnd_btn").click
     (@driver.find_element(:xpath, "//*[@id='request_form']/div/div[1]/h3").text).should == "Thanks for contacting MasteryConnect!"
   end
@@ -464,13 +517,15 @@ describe "MCcomForms" do
   it "tests_requestdemo_Notdistrict_form" do 
     wait = Selenium::WebDriver::Wait.new(:timeout => 15)
     @driver.get(@base_url + "/request-a-demo.html")
-    @driver.find_element(:name, "first_name").send_keys "Requestdemo"
-    @driver.find_element(:name, "last_name").send_keys "Noparttest"
+    @driver.find_element(:name, "first_name").send_keys "Noparttest"
+    @driver.find_element(:name, "last_name").send_keys "Requestdemo"
     @driver.find_element(:name, "title").send_keys "Friar"
-    Selenium::WebDriver::Support::Select.new(@driver.find_element(:class, "role")).select_by(:text, "Other")
+    select_dropdown(:class, "role", "Other")
     @driver.find_element(:name, "phone").send_keys "208-456-1237"
     @driver.find_element(:name, "email").send_keys Faker::Internet.email
-    Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "organization_info")).select_by(:text, "I'm not part of a school/district")
+    select_dropdown(:id, "organization_info", "I'm not part of a school/district")
+    @driver.find_element(:id, "manualOrg").send_keys "Knights of Ren"
+    select_dropdown(:name, "manual-state", "AK")
     @driver.find_element(:class, "med_gry_rnd_btn").click
     (@driver.find_element(:xpath, "//*[@id='request_form']/div/div[1]/h3").text).should == "Thanks for contacting MasteryConnect!"
   end
@@ -478,8 +533,8 @@ describe "MCcomForms" do
   it "tests_requestdemo_outsideUS_form" do 
     wait = Selenium::WebDriver::Wait.new(:timeout => 15)
     @driver.get(@base_url + "/request-a-demo.html")
-    @driver.find_element(:name, "first_name").send_keys "Requestdemo"
-    @driver.find_element(:name, "last_name").send_keys "OutsideUStest"
+    @driver.find_element(:name, "first_name").send_keys "OutsideUStest"
+    @driver.find_element(:name, "last_name").send_keys "Requestdemo"
     @driver.find_element(:name, "title").send_keys "Captain"
     Selenium::WebDriver::Support::Select.new(@driver.find_element(:class, "role")).select_by(:text, "Other")
     @driver.find_element(:name, "phone").send_keys "208-456-1237"
@@ -537,6 +592,13 @@ describe "MCcomForms" do
     (@driver.find_element(:xpath, "//*[@id='form_success']/h2").text).should == "Thanks!"
   end
 
+  def select_dropdown(selector, tag, option)
+    dropdown = @driver.find_element(selector, tag)
+    # sleep 5
+    select_list = Selenium::WebDriver::Support::Select.new(dropdown)
+    select_list.select_by(:text, option)
+  end
+
 end
 
 describe "SocrativeForms" do 
@@ -577,26 +639,49 @@ describe "SocrativeForms" do
     wait = Selenium::WebDriver::Wait.new(:timeout => 10)
     @driver.find_element(:link, "GET A FREE ACCOUNT").click
     (@driver.current_url).should == "https://b.socrative.com/login/teacher/#register-teacher"
-    @driver.find_element(:class, "firstname").send_keys "Test"
-    @driver.find_element(:class, "lastname").send_keys "Test"
-    @driver.find_element(:id, "email1").send_keys Faker::Internet.email
-    @driver.find_element(:id, "email1").send_keys :command, 'a'
-    @driver.find_element(:id, "email1").send_keys :command, 'c'
-    @driver.find_element(:id, "email2").send_keys :command, 'v'
-    @driver.find_element(:id, "password1").send_keys "password"
-    Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "country")).select_by(:text, "USA")
+    @driver.find_element(:id, "first-name").send_keys "Newteacher"
+    @driver.find_element(:id, "last-name").send_keys "Test"
+    @driver.find_element(:id, "profile-email").send_keys Faker::Internet.email
+    @driver.find_element(:id, "profile-email").send_keys :command, 'a'
+    @driver.find_element(:id, "profile-email").send_keys :command, 'c'
+    @driver.find_element(:id, "confirm-email").send_keys :command, 'v'
+    @driver.find_element(:id, "password").send_keys "password"
+    Selenium::WebDriver::Support::Select.new(@driver.find_element(:xpath, "//*[@id='teacher-form']/div[5]/div[1]/div[2]/div/select")).select_by(:text, "USA")
     Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "organization-type")).select_by(:text, "K-12")
-    @driver.find_element(:id, "zip").send_keys "84087"
-    wait.until { @driver.find_element(:id, "schoolListSelect").displayed? }
-    Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "schoolListSelect")).select_by(:text, "WEST BOUNTIFUL SCHOOL")
+    @driver.find_element(:id, "zip-code").send_keys "84087"
+    wait.until { @driver.find_element(:id, "select-school").displayed? }
+    Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "select-school")).select_by(:text, "WEST BOUNTIFUL SCHOOL")
+    Selenium::WebDriver::Support::Select.new(@driver.find_element(:xpath, "//*[@id='teacher-form']/div[7]/div/div/select")).select_by(:text, "Teacher")
     @driver.find_element(:id, "demo-yes").click
-    @driver.find_element(:id, "teacher").click
-    @driver.find_element(:id, "it-technology").click
-    @driver.find_element(:id, "administrator").click
-    @driver.find_element(:id, "other").click
-    @driver.find_element(:id, "agreeToTOS").click
-    @driver.find_element(:id, "create-account-button").click
-    (@driver.find_element(:xpath, "//*[@id='success-message-pop-up-box']/h4").text).should == "Welcome to Socrative!"
+    @driver.find_element(:id, "terms").click
+    @driver.find_element(:xpath, "//*[@id='teacher-form']/div[10]/div[1]/button").click
+    (@driver.find_element(:id, "success-message-pop-up-message").text).should == "Welcome to Socrative!\n\nCheck out our User Guide\nto find out all the cool things you can do."
+  end
+
+  it 'tests_socrative_k-12_notlisted_signup' do 
+    wait = Selenium::WebDriver::Wait.new(:timeout => 10)
+    @driver.find_element(:link, "GET A FREE ACCOUNT").click
+    (@driver.current_url).should == "https://b.socrative.com/login/teacher/#register-teacher"
+    @driver.find_element(:id, "first-name").send_keys "Newteachernotlisted"
+    @driver.find_element(:id, "last-name").send_keys "Test"
+    @driver.find_element(:id, "profile-email").send_keys Faker::Internet.email
+    @driver.find_element(:id, "profile-email").send_keys :command, 'a'
+    @driver.find_element(:id, "profile-email").send_keys :command, 'c'
+    @driver.find_element(:id, "confirm-email").send_keys :command, 'v'
+    @driver.find_element(:id, "password").send_keys "password"
+    Selenium::WebDriver::Support::Select.new(@driver.find_element(:xpath, "//*[@id='teacher-form']/div[5]/div[1]/div[2]/div/select")).select_by(:text, "USA")
+    Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "organization-type")).select_by(:text, "K-12")
+    @driver.find_element(:id, "zip-code").send_keys "84087"
+    wait.until { @driver.find_element(:id, "select-school").displayed? }
+    Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "select-school")).select_by(:text, "SCHOOL NOT LISTED")
+    wait.until { @driver.find_element(:xpath, "//*[@id='teacher-form']/div[6]/div[4]/div/select").displayed? }
+    Selenium::WebDriver::Support::Select.new(@driver.find_element(:xpath, "//*[@id='teacher-form']/div[6]/div[4]/div/select")).select_by(:text, "Utah")
+    @driver.find_element(:id, "school-name").send_keys "Lazy Town School"
+    Selenium::WebDriver::Support::Select.new(@driver.find_element(:xpath, "//*[@id='teacher-form']/div[7]/div/div/select")).select_by(:text, "Teacher")
+    @driver.find_element(:id, "demo-yes").click
+    @driver.find_element(:id, "terms").click
+    @driver.find_element(:xpath, "//*[@id='teacher-form']/div[10]/div[1]/button").click
+    (@driver.find_element(:id, "success-message-pop-up-message").text).should == "Welcome to Socrative!\n\nCheck out our User Guide\nto find out all the cool things you can do."
   end
 
   def element_present?(how, what)
