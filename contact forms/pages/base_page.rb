@@ -1,15 +1,3 @@
-require "selenium-webdriver"
-require "rspec"
-require "faker"
-require "pry"
-include RSpec::Expectations
-
-RSpec.configure do |config|
-  config.expect_with :rspec do |c|
-    c.syntax = [:should, :expect]
-  end
-end
-
 class BasePage
 
 	def initialize(driver)

@@ -31,14 +31,5 @@ class Starbucks < BasePage
 	def success_button_present?
 		is_displayed? SUCCESS_BUTTON
 	end
-
-	# def select_dropdown(selector, tag, option)
-	#   dropdown = @driver.find_element(selector, tag)
-	#   select_list = Selenium::WebDriver::Support::Select.new(dropdown)
-	#   select_list.select_by(:text, option)
-	# end
-
-	# def click(how, what)
-	# 	@driver.find_element(how, what).click
-	# end
+	
 end
