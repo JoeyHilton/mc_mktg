@@ -290,7 +290,7 @@ describe "FreeCoffee" do
     @driver.find_element(:xpath, "//*[@id='email']").send_keys "coffee@test.com"
     @driver.find_element(:xpath, "//*[@id='phone']").send_keys "111-222-3333"
     Selenium::WebDriver::Support::Select.new(@driver.find_element(:id, "school_list")).select_by(:text, "WEST BOUNTIFUL SCHOOL")
-    @driver.find_element(:id, "submit").click
+    @driver.find_element(:id, "submit").submit
 
     element_present?(:id, "form_success").should be true
     element_present?(:xpath, "//*[@id='form_success']/h2/i").should be true
