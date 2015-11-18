@@ -4,6 +4,7 @@ require_relative '../pages/starbucks'
 describe "FreeCoffee" do
 
   before(:each) do
+    ENV['base_url'] = 'https://www.masteryconnect.com'
     @driver.manage.timeouts.implicit_wait = 30
     @form = Starbucks.new(@driver)
   end
