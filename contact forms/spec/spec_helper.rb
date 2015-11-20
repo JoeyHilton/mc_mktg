@@ -11,15 +11,15 @@ RSpec.configure do |config|
 	end
 
 	config.before(:each) do 
-		# case ENV['browser']
-		# when 'firefox'
+		case ENV['browser']
+		when 'firefox'
 			@driver = Selenium::WebDriver.for :firefox
-		# when 'chrome'
-		# 	Selenium::WebDriver::Chrome::Service.executable_path = File.join(Dir.pwd, 'vendor/chromedriver')
-		# 	@driver = Selenium::WebDriver.for :chrome
-		# when 'safari'
-		# 	@driver = Selenium::WebDriver.for :safari
-		# end
+		when 'chrome'
+			Selenium::WebDriver::Chrome::Service.executable_path = File.join(Dir.pwd, 'vendor/chromedriver')
+			@driver = Selenium::WebDriver.for :chrome
+		when 'safari'
+			@driver = Selenium::WebDriver.for :safari
+		end
 	end
 
 	config.after(:each) do 
