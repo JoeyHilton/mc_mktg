@@ -10,18 +10,18 @@ describe "Overview" do
     @form = Overview.new(@driver)
   end
 
-  it "tests_slo_b_form" do 
+  it "tests_overview_form" do 
     @form.click(:xpath, "//li[5]/span")
-    @form.with('Overview Test', '84087', 'overview@test.com', '801-548-3322')
+    @form.with('Overview Test', '80012', Faker::Internet.email, '801-548-3322')
     @form.select_dropdown(:id, "role", "School Administrator")
-    @form.select_dropdown(:id, "school_list", "WEST BOUNTIFUL SCHOOL")
+    @form.select_dropdown_index(:id, "school_list", 2)
     @form.click(:id, "submit")
     @form.success_form_present?.should be true
   end
 
-  it "tests_slo_b_notlisted_form" do 
+  it "tests_overview_notlisted_form" do 
     @form.click(:xpath, "//li[5]/span")
-    @form.with('Notlisted overviewtest', '83713', 'notlistedoverview@test.com', '208-548-3322')
+    @form.with('Notlisted overviewtest', '80012', Faker::Internet.email, '208-548-3322')
     @form.select_dropdown(:id, "role", "Teacher")
     @form.select_dropdown(:id, "school_list", "SCHOOL NOT LISTED")
     @form.wait_for(10) { @driver.find_element(:id, "school_manual_input").displayed? }

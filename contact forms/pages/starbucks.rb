@@ -6,6 +6,7 @@ class Starbucks < BasePage
 		NAME_INPUT = { id: 'full_name'}
 		ZIP_CODE = {id: 'zip_code'}
 		EMAIL = { id: 'email' }
+		HONEY = { id: 'user_email' }
 		PHONE = { id: 'phone'}
 		BUTTON = { id: "submit" }
 		ALT_SCHOOL = { id: "school_list_alt" }
@@ -22,6 +23,10 @@ class Starbucks < BasePage
 		type zip, ZIP_CODE
 		type email, EMAIL
 		type phone, PHONE
+	end
+
+	def honeypot(honey)
+		type honey, HONEY
 	end
 
 	def info_form_present?

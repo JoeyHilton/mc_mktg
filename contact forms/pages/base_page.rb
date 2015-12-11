@@ -34,6 +34,12 @@ class BasePage
 	  select_list.select_by(:text, option)
 	end
 
+	def select_dropdown_index(selector, tag, option)
+	  dropdown = @driver.find_element(selector, tag)
+	  select_list = Selenium::WebDriver::Support::Select.new(dropdown)
+	  select_list.select_by(:index, option)
+	end
+
 	def click(how, what)
 		@driver.find_element(how, what).click
 	end

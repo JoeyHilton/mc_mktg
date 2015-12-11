@@ -293,7 +293,7 @@ describe "FreeCoffee" do
     @driver.find_element(:id, "submit").submit
 
     element_present?(:id, "form_success").should be true
-    element_present?(:xpath, "//*[@id='form_success']/h2/i").should be true
+    element_present?(:xpath, "//*[@id='form_success']/h2/i").should be true 
     verify { element_present?(:link, "OK, GOT IT").should be_true }
     @driver.find_element(:link, "OK, GOT IT").click
   end
