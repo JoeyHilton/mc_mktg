@@ -23,4 +23,12 @@ class Navbar < BasePage
 		(@driver.current_url).should == "https://reclaimingtheclassroom.com/media/"
 	end
 
+	def home_page?
+		(@driver.current_url).should == "https://reclaimingtheclassroom.com/"
+	end
+
+	def about_page?
+		(@driver.current_url).should == "https://reclaimingtheclassroom.com/about/"
+	end
+
 end

@@ -52,4 +52,19 @@ class BasePage
 		Selenium::WebDriver::Wait.new(timeout: seconds).until { yield }
 	end
 
+	def window_switch(selector, tag, url)
+		first_window = @driver.window_handle
+    @driver.find_element(selector, tag).click
+    all_windows = @driver.window_handles
+    new_window = all_windows.select { |this_window| this_window != first_window }
+
+    @driver.switch_to.window(first_window)
+
+    @driver.switch_to.window(new_window)
+    # expect(@driver.title).to eql (title)
+		(@driver.current_url).should == (url)
+    @driver.close
+    @driver.switch_to.window(first_window)
+	end
+
 end
