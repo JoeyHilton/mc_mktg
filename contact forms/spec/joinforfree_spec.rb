@@ -11,10 +11,12 @@ describe "join for free form" do
   end
 
   it "tests_joinforfree_form" do 
+    fname = Faker::Name.first_name
+    lname = Faker::Name.last_name
     @form.click(:id, "free_top_button")
     @form.info_form_present?.should be true
     @form.select_dropdown(:id, "teacher_title", "Mr.")
-    @form.with('Joinforfree','Test', Faker::Internet.email, "85040")
+    @form.with('Joinforfree','Test', fname + "." + lname +  "@test.com", "85040")
     @form.select_dropdown(:id, "contact_role", "Teacher")
     @form.wait_for(10) { @driver.find_element(:id, "signUpSchool").displayed? }
     @form.click(:xpath, "//*[@id='signUpSchool']/optgroup[1]/option[3]")

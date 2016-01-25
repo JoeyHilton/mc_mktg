@@ -11,8 +11,10 @@ describe "request demo form" do
   end
 
   it "tests_mindful_form" do 
+    fname = Faker::Name.first_name
+    lname = Faker::Name.last_name
     @form.info_form_present?.should be true
-    @form.with('Mindful Test', Faker::Internet.email, '208-456-1237', '90001')
+    @form.with('Mindful Test', fname + "." + lname +  "@test.com", '208-456-1237', '90001')
     @form.select_dropdown(:id, "role", "Teacher")
     @form.select_dropdown_index(:id, 'school_list', 2)
     @form.click(:id, "submit")
@@ -20,8 +22,10 @@ describe "request demo form" do
   end
 
   it "tests_mindful_notlisted_form" do 
+    fname = Faker::Name.first_name
+    lname = Faker::Name.last_name
     @form.info_form_present?.should be true
-    @form.with('Mindfulnotlisted Test', Faker::Internet.email, '208-456-1237', '90001')
+    @form.with('Mindfulnotlisted Test', fname + "." + lname +  "@test.com", '208-456-1237', '90001')
     @form.select_dropdown(:id, "role", "School Administrator")
     @form.select_dropdown(:id, 'school_list', "SCHOOL NOT LISTED")
     @form.wait_for(10) { @driver.find_element(:id, "school_manual_input").displayed? }

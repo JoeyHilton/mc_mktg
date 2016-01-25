@@ -11,10 +11,12 @@ describe "socrative signup form" do
   end
 
   it "tests_signup_form" do 
+    fname = Faker::Name.first_name
+    lname = Faker::Name.last_name
     @form.click(:link, "GET A FREE ACCOUNT")
     @form.correct_url?.should be true
     @form.info_form_present?.should be true
-    @form.with('Newteacher', 'Test', Faker::Internet.email)
+    @form.with('Newteacher', 'Test', fname + "." + lname +  "@test.com")
     @driver.find_element(:id, "profile-email").send_keys :command, 'a'
     @driver.find_element(:id, "profile-email").send_keys :command, 'c'
     @driver.find_element(:id, "confirm-email").send_keys :command, 'v'
@@ -32,10 +34,12 @@ describe "socrative signup form" do
   end
 
   it "tests_signup_notlisted_form" do 
+    fname = Faker::Name.first_name
+    lname = Faker::Name.last_name
     @form.click(:link, "GET A FREE ACCOUNT")
     @form.correct_url?.should be true
     @form.info_form_present?.should be true
-    @form.with('Newteachernotlisted', 'Test', Faker::Internet.email)
+    @form.with('Newteachernotlisted', 'Test', fname + "." + lname +  "@test.com")
     @driver.find_element(:id, "profile-email").send_keys :command, 'a'
     @driver.find_element(:id, "profile-email").send_keys :command, 'c'
     @driver.find_element(:id, "confirm-email").send_keys :command, 'v'

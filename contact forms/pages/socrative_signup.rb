@@ -41,7 +41,7 @@ class SocrativeSignup < BasePage
 	end
 
 	def success_message_present?
-		(@driver.find_element(:id, "success-message-pop-up-message").text).should == "Welcome to Socrative!\n\nCheck out our User Guide\nto find out all the cool things you can do."
+		(@driver.find_element(:id, "pop-up-message").text).should == "Welcome to Socrative!\n\nCheck out our User Guide\nto find out all the cool things you can do."
 	end
 	
 end
