@@ -9,26 +9,18 @@ class Navbar < BasePage
 
 	def initialize(driver)
 		super
-		visit '/media.html'
+		visit '/media'
 	end
 
 	def links_present?
-		(@driver.find_element(HOME).text).should == "HOME"
-		(@driver.find_element(MEDIA).text).should == "PODCAST & MORE"
-		(@driver.find_element(ABOUT).text).should == "ABOUT TRENTON"
-		(@driver.find_element(BUY).text).should == "BUY BOOK"
+		(find(HOME).text).should == "HOME"
+		(find(MEDIA).text).should == "PODCAST & MORE"
+		(find(ABOUT).text).should == "ABOUT TRENTON"
+		(find(BUY).text).should == "BUY BOOK"
 	end
 
-	def media_page?
-		(@driver.current_url).should == "https://reclaimingtheclassroom.com/media/"
-	end
-
-	def home_page?
-		(@driver.current_url).should == "https://reclaimingtheclassroom.com/"
-	end
-
-	def about_page?
-		(@driver.current_url).should == "https://reclaimingtheclassroom.com/about/"
+	def buy_link?
+		window_switch :id, "menu-item-74", "http://www.amazon.com/Reclaiming-Classroom-Trenton-Goble/dp/1519636687/ref=sr_1_6?ie=UTF8&qid=1452796927&sr=8-6&keywords=reclaiming+the+classroom"
 	end
 
 end

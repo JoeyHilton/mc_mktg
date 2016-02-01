@@ -8,16 +8,16 @@ class BasePage
 		@driver.get ENV['base_url'] + url_path
 	end
 
+	def goto
+		@driver.get ENV['base_url']
+	end
+
 	def find(locator)
 		@driver.find_element locator
 	end
 
-	def type(text, locator)
-		find(locator).send_keys text
-	end
-
-	def submit(locator)
-		find(locator).submit
+	def current_url(url)
+		(@driver.current_url).should == url
 	end
 
 	def is_displayed?(locator)
@@ -32,16 +32,29 @@ class BasePage
 		@driver.navigate.back
 	end
 
-	def select_dropdown(selector, tag, option)
-	  dropdown = @driver.find_element(selector, tag)
-	  select_list = Selenium::WebDriver::Support::Select.new(dropdown)
-	  select_list.select_by(:text, option)
+	def page_title(title)
+		(@driver.title).should == title
 	end
 
-	def select_dropdown_index(selector, tag, option)
-	  dropdown = @driver.find_element(selector, tag)
-	  select_list = Selenium::WebDriver::Support::Select.new(dropdown)
-	  select_list.select_by(:index, option)
+	def media_page?
+		current_url "https://reclaimingtheclassroom.com/media/"
+		page_title "Reclaiming The Classroom | Podcast"
+	end
+
+	def home_page?
+		current_url "https://reclaimingtheclassroom.com/"
+		page_title "Reclaiming The Classroom"
+	end
+
+	def about_page?
+		current_url "https://reclaimingtheclassroom.com/about/"
+		page_title "Reclaiming The Classroom | Trenton Goble"
+	end
+
+	def find_trenton
+		puts "I found Trenton!" if wait.until {
+		find(id: "trenton").css_value("background-image").should == "url(\"https://reclaimingtheclassroom.com/wp-content/themes/reclaim/img/trenton@2x.jpg\")"
+		}
 	end
 
 	def click(how, what)
@@ -50,6 +63,10 @@ class BasePage
 
 	def wait_for(seconds = 15)
 		Selenium::WebDriver::Wait.new(timeout: seconds).until { yield }
+	end
+
+	def wait
+		Selenium::WebDriver::Wait.new(:timeout => 15)
 	end
 
 	def window_switch(selector, tag, url)

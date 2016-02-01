@@ -11,15 +11,15 @@ describe "navbar" do
   end
 
   it "tests_navbar" do 
-    @links.links_present?.should be true
+    @links.links_present?
     @links.click(:id, "menu-item-70")
-    @links.media_page?.should be true
+    @links.media_page?
     @links.click(:id, "menu-item-69")
-    @links.home_page?.should be true
+    @links.home_page?
     @links.go_back
     @links.click(:id, "menu-item-73")
-    @links.about_page?.should be true
+    @links.about_page?
     @links.go_back
-    @links.window_switch(:id, "menu-item-74", "http://www.amazon.com/Reclaiming-Classroom-Trenton-Goble/dp/1519636687/ref=sr_1_6?ie=UTF8&qid=1452796927&sr=8-6&keywords=reclaiming+the+classroom")
+    @links.buy_link?
   end
 end
