@@ -4,7 +4,7 @@ require_relative '../pages/socrative_signup'
 describe "socrative signup form" do
 
   before(:each) do
-    ENV['base_url'] ||= 'www.socrative.com'
+    ENV['base_url'] ||= 'http://www.socrative.com'
     ENV['browser'] ||= 'firefox'
     @driver.manage.timeouts.implicit_wait = 30
     @form = SocrativeSignup.new(@driver)

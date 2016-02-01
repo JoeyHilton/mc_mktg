@@ -7,7 +7,7 @@ class SocrativeContact < BasePage
 
 	def initialize(driver)
 		super
-		visit '/'
+		goto
 	end
 
 	def with(email, message)

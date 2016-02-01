@@ -8,6 +8,10 @@ class BasePage
 		@driver.get ENV['base_url'] + url_path
 	end
 
+	def goto
+		@driver.get ENV['base_url']
+	end
+
 	def find(locator)
 		@driver.find_element locator
 	end

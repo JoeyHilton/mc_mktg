@@ -4,7 +4,7 @@ require_relative '../pages/socrative_contact'
 describe "socrative contact form" do
 
   before(:each) do
-    ENV['base_url'] ||= 'www.socrative.com'
+    ENV['base_url'] ||= 'http://www.socrative.com/'
     ENV['browser'] ||= 'firefox'
     @driver.manage.timeouts.implicit_wait = 30
     @form = SocrativeContact.new(@driver)
@@ -16,6 +16,8 @@ describe "socrative contact form" do
     @form.select_dropdown(:id, "select_device", "Firefox - Browser")
     @form.select_dropdown(:id, 'select_topic', "Feedback")
     @form.select_dropdown(:id, 'select_area', "Space Race")
+    @form.select_dropdown(:id, "select_device", "Firefox - Browser")
+    @form.click(:id, "help_submit")
     @form.click(:id, "help_submit")
     @form.success_message_present?.should be true
   end
