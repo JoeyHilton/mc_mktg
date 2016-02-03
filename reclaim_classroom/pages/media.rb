@@ -3,8 +3,15 @@ require_relative 'base_page'
 class Media < BasePage
 
 		HEADER = { xpath: ".//*[@id='podcast']/div/div[1]/h1" }
-		ARTICLES = { xpath: ".//*[@id='podcast']/div/div[2]/h2[1]"}
-		NEWS = { xpath: ".//*[@id='podcast']/div/div[2]/h2[2]"}
+		ARTICLES = { xpath: ".//*[@id='podcast']/div/div[2]/h2[1]" }
+		NEWS = { xpath: ".//*[@id='podcast']/div/div[2]/h2[2]" }
+		EPISODE_NAME = { :class => "nowrap" }
+		AUDIO = { :class => "button_wrapper" }
+		LISTEN = { :class => "audio_play" }
+		PLAY = { :class => "jp-play" }
+		PAUSE = { :class => "jp-pause" }
+		TIME = { :class => "jp-currrent-time" }
+		DOWNLOADS = { :class => "download_link" }
 
 	def initialize(driver)
 		super
@@ -31,6 +38,41 @@ class Media < BasePage
 		window_switch :link, "Daily Edventures", "http://dailyedventures.com/index.php/2014/01/28/masteryconnect/"
 		window_switch :link, "K-12 Tech Decisions", "http://www.k-12techdecisions.com/article/the_problem_with_big_data_in_k_12_education#"
 		window_switch :link, "Smart Cities: EduPreneurs Series", "http://gettingsmart.com/2013/10/new-podcast-edupreneurs-edreach-network/"
+	end
+
+	def get_episodes_available?
+		@driver.find_elements(EPISODE_NAME).each do |r|
+			puts "Episode: " + r.text
+		end
+	end
+
+	def list_download_links?
+		@driver.find_elements(DOWNLOADS).each do |d|
+			puts d.attribute('href')
+		end
+	end
+
+	def audio_play?
+		finds(LISTEN).each do |i|
+			i.click
+		end
+
+		finds(PLAY).each do |k|
+			k.click
+			sleep 5
+		end
+
+		finds(PAUSE).each do |j|
+			j.displayed?
+		end
+		# finds(PAUSE).each do |l|
+		# 	l.click if wait.until { (TIME).text.include? "00:05" }
+		# end
+	end
+
+	def subscribe?
+		window_switch :class, "itunes_link", "https://itunes.apple.com/us/podcast/reclaiming-the-classroom/id1076679360"
+		window_switch :class, "android_link", "http://pca.st/VaLM"
 	end
 
 end

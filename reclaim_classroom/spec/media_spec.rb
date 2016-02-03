@@ -11,13 +11,35 @@ describe "media_page" do
   end
 
   it "tests_media_page_elements" do 
-    @media.elements_present?.should be true
+    puts "Test Passed: Media Page elements found and verified" if @media.wait.until {
+      @media.elements_present?.should be true
+    }
     @media.click(:link, "Trenton Goble")
     @media.about_page?
     @media.go_back
   end
 
   it "tests_external_links" do 
-    @media.external_articles?
+    puts "Test Passed: External links validated" if @media.wait.until {
+      @media.external_articles?
+    } 
+  end
+
+  it "checks_available_episodes" do 
+    puts "These are the available episodes ^^ " if @media.wait.until {
+    @media.get_episodes_available?
+  }
+  end
+
+  it "plays episode audio" do
+    @media.audio_play? 
+  end
+
+  it "lists download links" do
+    @media.list_download_links?
+  end
+
+  it "tests subscribe links" do 
+    @media.subscribe?
   end
 end

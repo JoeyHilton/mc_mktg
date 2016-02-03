@@ -16,6 +16,10 @@ class BasePage
 		@driver.find_element locator
 	end
 
+	def finds(locator)
+		@driver.find_elements locator
+	end
+
 	def current_url(url)
 		(@driver.current_url).should == url
 	end
