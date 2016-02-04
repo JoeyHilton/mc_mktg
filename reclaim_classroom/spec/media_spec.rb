@@ -19,6 +19,11 @@ describe "media_page" do
     @media.go_back
   end
 
+  it "lists all external links" do
+    puts "These are the links to be tested next:"
+    @media.links_list?
+  end
+
   it "tests_external_links" do 
     puts "Test Passed: External links validated" if @media.wait.until {
       @media.external_articles?
@@ -36,6 +41,7 @@ describe "media_page" do
   end
 
   it "lists download links" do
+    puts "Download links are:"
     @media.list_download_links?
   end
 

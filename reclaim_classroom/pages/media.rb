@@ -12,6 +12,7 @@ class Media < BasePage
 		PAUSE = { :class => "jp-pause" }
 		TIME = { :class => "jp-currrent-time" }
 		DOWNLOADS = { :class => "download_link" }
+		LINKS = { :xpath => "//div[contains(@class, 'sidebar')]//a" }
 
 	def initialize(driver)
 		super
@@ -26,6 +27,12 @@ class Media < BasePage
 		(find(ARTICLES).text).include? "ARTICLES FROM TRENTON"
 		(find(NEWS).text).include? "TRENTON IN THE NEWS"
 		page_title "Reclaiming The Classroom | Podcast"
+	end
+
+	def links_list?
+		@driver.find_elements(LINKS).each do |i|
+			puts i.attribute('href')
+		end
 	end
 
 	def external_articles?
