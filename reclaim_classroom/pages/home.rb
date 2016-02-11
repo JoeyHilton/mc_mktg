@@ -6,6 +6,7 @@ class Home < BasePage
 		BUY_BUTTON = { class: "book_link"}
 		CHAPTER = { class: "chapter_link"}
 		QUOTE = { class: "quote"}
+		QUOTEMARK = { class: "quotemark"}
 		NEWSH2 = { xpath: ".//*[@id='media']/article/h2"}
 		MEETH2 = { xpath: ".//*[@id='author']/article/div[2]/h2"}
 		MEDIA_PLAY = { class: "circle"}
@@ -23,6 +24,7 @@ class Home < BasePage
 		(find(RECLAIMH1).text).should == "Reclaiming the Classroom"
 		is_displayed? BUY_BUTTON
 		is_displayed? CHAPTER
+		is_displayed? QUOTEMARK
 		is_displayed? QUOTE
 		is_displayed? NEWSH2
 		(find(NEWSH2).text).should == "News & Media"
@@ -31,5 +33,9 @@ class Home < BasePage
 		is_displayed? MEDIA_PLAY
 		is_displayed? BIO
 	end
-	
+
+	def hero_image?
+		is_displayed? BOOK
+	end
+
 end

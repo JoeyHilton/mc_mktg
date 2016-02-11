@@ -11,7 +11,7 @@ describe "media_page" do
   end
 
   it "tests_media_page_elements" do 
-    puts "Test Passed: Media Page elements found and verified" if @media.wait.until {
+    puts "Media Page elements found and verified" if @media.wait.until {
       @media.elements_present?.should be true
     }
     @media.click(:link, "Trenton Goble")
@@ -25,7 +25,7 @@ describe "media_page" do
   end
 
   it "tests_external_links" do 
-    puts "Test Passed: External links validated" if @media.wait.until {
+    puts "External links validated" if @media.wait.until {
       @media.external_articles?
     } 
   end
