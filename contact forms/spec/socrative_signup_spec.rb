@@ -10,9 +10,10 @@ describe "socrative signup form" do
     @form = SocrativeSignup.new(@driver)
   end
 
+  fname = Faker::Name.first_name
+  lname = Faker::Name.last_name
+
   it "tests_signup_form" do 
-    fname = Faker::Name.first_name
-    lname = Faker::Name.last_name
     @form.click(:link, "GET A FREE ACCOUNT")
     @form.correct_url?.should be true
     @form.info_form_present?.should be true
@@ -34,8 +35,6 @@ describe "socrative signup form" do
   end
 
   it "tests_signup_notlisted_form" do 
-    fname = Faker::Name.first_name
-    lname = Faker::Name.last_name
     @form.click(:link, "GET A FREE ACCOUNT")
     @form.correct_url?.should be true
     @form.info_form_present?.should be true

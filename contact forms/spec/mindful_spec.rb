@@ -10,9 +10,10 @@ describe "request demo form" do
     @form = Mindful.new(@driver)
   end
 
+  fname = Faker::Name.first_name
+  lname = Faker::Name.last_name
+    
   it "tests_mindful_form" do 
-    fname = Faker::Name.first_name
-    lname = Faker::Name.last_name
     @form.info_form_present?.should be true
     @form.with('Mindful Test', fname + "." + lname +  "@test.com", '208-456-1237', '90001')
     @form.select_dropdown(:id, "role", "Teacher")
@@ -22,8 +23,6 @@ describe "request demo form" do
   end
 
   it "tests_mindful_notlisted_form" do 
-    fname = Faker::Name.first_name
-    lname = Faker::Name.last_name
     @form.info_form_present?.should be true
     @form.with('Mindfulnotlisted Test', fname + "." + lname +  "@test.com", '208-456-1237', '90001')
     @form.select_dropdown(:id, "role", "School Administrator")

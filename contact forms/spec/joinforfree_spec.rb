@@ -10,9 +10,10 @@ describe "join for free form" do
     @form = JoinForFree.new(@driver)
   end
 
+  fname = Faker::Name.first_name
+  lname = Faker::Name.last_name
+    
   it "tests_joinforfree_form" do 
-    fname = Faker::Name.first_name
-    lname = Faker::Name.last_name
     @form.click(:id, "free_top_button")
     @form.info_form_present?.should be true
     @form.select_dropdown(:id, "teacher_title", "Mr.")

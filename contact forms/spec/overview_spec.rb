@@ -10,9 +10,10 @@ describe "Overview" do
     @form = Overview.new(@driver)
   end
 
+  fname = Faker::Name.first_name
+  lname = Faker::Name.last_name
+
   it "tests_overview_form" do 
-    fname = Faker::Name.first_name
-    lname = Faker::Name.last_name
     @form.click(:xpath, "//li[5]/span")
     @form.with('Overview Test', '80012', fname + "." + lname +  "@test.com", '801-548-3322')
     @form.select_dropdown(:id, "role", "School Administrator")
@@ -22,8 +23,6 @@ describe "Overview" do
   end
 
   it "tests_overview_notlisted_form" do 
-    fname = Faker::Name.first_name
-    lname = Faker::Name.last_name
     @form.click(:xpath, "//li[5]/span")
     @form.with('Notlisted overviewtest', '80012', fname + "." + lname +  "@test.com", '208-548-3322')
     @form.select_dropdown(:id, "role", "Teacher")
