@@ -2,21 +2,28 @@ require_relative 'base_page'
 
 class Footer < BasePage
 
-		TWITTER = { class: "icon-twitter" }
-		EMAIL = { class: "icon-mail"}
-		MC = { link: "MasteryConnect" }
+		WALLST = { class: "icon-twitter" }
+		EDUTOPIA = { class: "icon-mail"}
+		TC = { link: "MasteryConnect" }
 		FOOTER = { xpath: "html/body/footer"}
 
 	def initialize(driver)
 		super
-		goto
+		visit '/usability'
 	end
 
-	def links_present?
-		is_displayed? TWITTER
-		is_displayed? EMAIL
-		(find(MC).text).should == "MasteryConnect"
-		(find(FOOTER).text).include? "© 2016 Trenton Goble | Learn more about Trenton's work at MasteryConnect"
+	def elements_present?
+		(find(FOOTER).text).include? "© Copyright 2016 MasteryConnect. All Rights Reserved."
+		puts "All the logos in the footer are displayed" if wait.until {
+			@driver.find_element(:xpath, "//div[contains(@class, 'media')]//img[@src='img/wsj.svg']").displayed?
+			@driver.find_element(:xpath, "//div[contains(@class, 'media')]//img[@src='img/edutopia.svg']").displayed?
+			@driver.find_element(:xpath, "//div[contains(@class, 'media')]//img[@src='img/tc.svg']").displayed?
+			@driver.find_element(:xpath, "//div[contains(@class, 'media')]//img[@src='img/forbes.svg']").displayed?
+			@driver.find_element(:xpath, "//div[contains(@class, 'media')]//img[@src='img/mashable.svg']").displayed?
+			@driver.find_element(:xpath, "//div[contains(@class, 'media')]//img[@src='img/huffpost.svg']").displayed?
+			@driver.find_element(:xpath, "//div[contains(@class, 'media')]//img[@src='img/edsurge.svg']").displayed?
+		}
 	end
 
 end
+

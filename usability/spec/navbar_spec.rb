@@ -10,8 +10,18 @@ describe "navbar" do
     @links = Navbar.new(@driver)
   end
 
-  it "tests_navbar" do 
+  it "verifies_elements" do 
     @links.links_present?
-    @links.nav_links?
+  end
+
+  it "tests_links" do
+    @links.click(:class, "logo")
+    @links.mc_page?
+    @links.go_back
+    @links.click(:link, "DEMO")
+    @links.demo_page?
+    @links.go_back
+    @links.click(:link, "LOGIN")
+    @links.login_page?
   end
 end

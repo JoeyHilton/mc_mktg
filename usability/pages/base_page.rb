@@ -40,19 +40,19 @@ class BasePage
 		(@driver.title).should == title
 	end
 
-	def media_page?
-		current_url "https://reclaimingtheclassroom.com/media/"
-		page_title "Reclaiming The Classroom | Podcast"
+	def mc_page?
+		current_url "https://www.masteryconnect.com/"
+		page_title "MasteryConnect"
 	end
 
-	def home_page?
-		current_url "https://reclaimingtheclassroom.com/"
-		page_title "Reclaiming The Classroom"
+	def demo_page?
+		current_url "https://www.masteryconnect.com/request-a-demo.html"
+		page_title "Teachers Tools for Teaching | MasteryConnect"
 	end
 
-	def about_page?
-		current_url "https://reclaimingtheclassroom.com/about/"
-		page_title "Reclaiming The Classroom | Trenton Goble"
+	def login_page?
+		current_url "https://app.masteryconnect.com/login"
+		page_title "MasteryConnect :: sessions"
 	end
 
 	def find_trenton
