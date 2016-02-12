@@ -20,6 +20,9 @@ describe "footer" do
   	puts "Brain animation finished drawing" if @header.wait.until {
   	  @header.brain_there?.should be true
   	}
-  	
-  	end
+  end
+
+  it "tests_background_image_presence" do 
+  	@header.bg_image?
+  end
 end

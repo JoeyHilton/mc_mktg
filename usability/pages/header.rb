@@ -26,4 +26,10 @@ class Header < BasePage
 		is_displayed? BRAIN
 	end
 
+	def bg_image?
+		puts "Background image displayed" if wait.until {
+			find(xpath: "html/body/header").css_value("background-image").should == "url(\"https://www.masteryconnect.com/usability/img/header_bg.jpg\")"
+		}
+	end
+
 end
