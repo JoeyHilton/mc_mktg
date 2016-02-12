@@ -15,4 +15,11 @@ describe "footer" do
     	@header.elements_present?.should be true
     }
   end
+
+  it "tests_brain_drawing" do
+  	puts "Brain animation finished drawing" if @header.wait.until {
+  	  @header.brain_there?.should be true
+  	}
+  	
+  	end
 end
