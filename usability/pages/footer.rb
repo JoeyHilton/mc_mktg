@@ -2,9 +2,6 @@ require_relative 'base_page'
 
 class Footer < BasePage
 
-		WALLST = { class: "icon-twitter" }
-		EDUTOPIA = { class: "icon-mail"}
-		TC = { link: "MasteryConnect" }
 		FOOTER = { xpath: "html/body/footer"}
 
 	def initialize(driver)

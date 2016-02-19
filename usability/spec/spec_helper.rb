@@ -2,6 +2,7 @@ require "selenium-webdriver"
 require "rspec"
 require "faker"
 require "pry"
+require "colorize"
 include RSpec::Expectations
 
 RSpec.configure do |config|

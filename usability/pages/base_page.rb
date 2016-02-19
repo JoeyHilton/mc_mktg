@@ -55,10 +55,14 @@ class BasePage
 		page_title "MasteryConnect :: sessions"
 	end
 
-	def find_trenton
-		puts "I found Trenton!" if wait.until {
-		find(id: "trenton").css_value("background-image").should == "url(\"https://reclaimingtheclassroom.com/wp-content/themes/reclaim/img/trenton@2x.jpg\")"
-		}
+	def signup_page?
+		current_url "https://docs.google.com/a/masteryconnect.com/forms/d/1wZmzkOCGjEa4W0wnCOCV8ciSb-iyjalDICGPoYP20T8/viewform"
+		page_title "User Experience Research Sign-up"
+	end
+
+	def unsub_page?
+		current_url "https://docs.google.com/a/masteryconnect.com/forms/d/19JhZ3UchvaZV8UzsbW0vHc50RHWDlg2sA1ODJEC2fMs/viewform"
+		page_title "Unsubscribe from MasteryConnect User Experience Research"
 	end
 
 	def click(how, what)
@@ -71,21 +75,6 @@ class BasePage
 
 	def wait
 		Selenium::WebDriver::Wait.new(:timeout => 15)
-	end
-
-	def window_switch(selector, tag, url)
-		first_window = @driver.window_handle
-    @driver.find_element(selector, tag).click
-    all_windows = @driver.window_handles
-    new_window = all_windows.select { |this_window| this_window != first_window }
-
-    @driver.switch_to.window(first_window)
-
-    @driver.switch_to.window(new_window)
-    # expect(@driver.title).to eql (title)
-		(@driver.current_url).should == (url)
-    @driver.close
-    @driver.switch_to.window(first_window)
 	end
 
 end
