@@ -8,6 +8,13 @@ class Webinar < BasePage
 		PHONE = { name: "Phone"}
 		EMAIL = { name: "Email" }
 
+		FULL_NAME = { id: "full_name" }
+		JOB_TITLE = { id: "job_title" }
+		PHONE_NUMBER = { id: "phone" }
+		EMAIL2 = { id: "email" }
+		HEADER = { xpath: ".//*[@id='feature_area']/div/div/div/h1"}
+		PLAYER = { id: "player" }
+
 	def initialize(driver)
 		super
 		visit '/webinars.html'
@@ -21,8 +28,24 @@ class Webinar < BasePage
 		type email, EMAIL
 	end
 
+	def with_this(fullname, title, phone, email)
+		type fullname, FULL_NAME
+		type title, JOB_TITLE
+		type phone, PHONE_NUMBER
+		type email, EMAIL2
+	end
+
 	def info_form_present?
 		is_displayed? INFO_FORM
+	end
+
+	def correct_page?
+		current_url("https://www.masteryconnect.com/recorded-webinar.html?t=TWFzdGVyeU1hdHRlcnM=&s=RnJvbSBSZW1lZGlhdGlvbiB0byBUb3AgMTAgd2l0aCBEYXRhLURyaXZlbiBJbnN0cnVjdGlvbg==")
+		find(HEADER).text.should == "Recorded Webinar"
+	end
+
+	def video?
+		is_displayed? PLAYER
 	end
 
 	def success_message_present?

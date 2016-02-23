@@ -20,4 +20,16 @@ describe "request demo form" do
     @form.click(:class, "lte_gry_rnd_btn")
     @form.success_message_present?.should be true
   end
+
+  it "tests_recorded_webinar_form" do 
+    @form.click(:xpath, ".//*[@id='webinar_recorded']/div/a/span")
+    @form.correct_page?
+    @form.info_form_present?.should be true
+    @form.with_this('Recorded Test', 'Viceroy', '385-456-1237', Faker::Internet.email)
+    @form.select_dropdown(:id, "role", "School Administrator")
+    @form.select_dropdown(:id, "state", "AL")
+    @form.click(:xpath, ".//*[@id='radio-btns']/div[1]/span/input")
+    @form.click(:class, "lte_gry_rnd_btn")
+    @form.video?
+  end
 end

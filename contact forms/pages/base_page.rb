@@ -24,6 +24,10 @@ class BasePage
 		find(locator).submit
 	end
 
+	def current_url(url)
+		(@driver.current_url).should == url
+	end
+
 	def is_displayed?(locator)
 		begin
 			find(locator).displayed?
