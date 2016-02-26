@@ -1,0 +1,35 @@
+require_relative 'base_page'
+
+class Header < BasePage
+
+		HEADER = { xpath: "html/body/header" }
+		HEAD = { xpath: "//div[@class='container']//h1" }
+		SUBHEAD = { xpath: "//div[@class='container']//h4" }
+		BRAIN = { id: "brainsvg" }
+
+	def initialize(driver)
+		super
+		goto
+	end
+
+	def elements_present?
+		is_displayed? HEADER
+		(find(HEADER).text).include? "User Experience Research"
+		is_displayed? HEAD
+		(find(HEAD).text).should == "User Experience Research"
+		is_displayed? SUBHEAD
+		(find(SUBHEAD).text).should == "Help improve MasteryConnect products for the classroom."
+	end
+
+	def brain_there?
+		sleep 3
+		is_displayed? BRAIN
+	end
+
+	def bg_image?
+		puts "Background image displayed" if wait.until {
+			find(xpath: "html/body/header").css_value("background-image").should == "url(\"https://www.masteryconnect.com/usability/img/header_bg.jpg\")"
+		}
+	end
+
+end
